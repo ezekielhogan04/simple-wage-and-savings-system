@@ -1,0 +1,55 @@
+import java.text.DecimalFormat;
+
+class Main {
+    public static void main(String[] args) {
+        int age = 22;
+        final int retirement = 65;
+        double salary = 26000; // Now using double for salary
+        final int months = 12;
+        int expense = 750;
+        final int mortgage = 900;
+        final double mortgageLimit = 442800.0;
+
+        DecimalFormat currencyFormat = new DecimalFormat("£#,##0.00");
+
+        double totalMortgage = 0;
+        double totalExpense = 0;
+        double totalSavings = 0;
+
+        // Mortgage per year
+        for (int year = 0; year <= (retirement - age); year++) {
+            double yearMortgage = mortgage * months;
+            totalMortgage += yearMortgage;
+
+            System.out.println("Year " + (age + year) + " Mortgage: " + currencyFormat.format(totalMortgage));
+
+            // Check if mortgage is paid off
+            if (totalMortgage >= mortgageLimit) {
+                System.out.println("Mortgage paid off!");
+                // No need to break; continue calculating savings
+            }
+
+            // Expenses per year
+            double yearExpense = expense * months;
+            totalExpense += yearExpense;
+
+            // Salary and Tax Calculation
+            double yearSalary = salary + 300;
+
+            // Progressive tax calculation
+            double tax20 = Math.min(35000, yearSalary) * 0.20;
+            double tax40 = Math.max(0, yearSalary - 35000) * 0.40;
+            double totalTax = tax20 + tax40;
+
+            // Net salary after tax
+            double netSalary = yearSalary - totalTax;
+
+            // Savings per year
+            double yearSavings = netSalary - (yearMortgage + yearExpense);
+            totalSavings += yearSavings;
+
+            System.out.println("Year " + (age + year) + " Net Salary: " + currencyFormat.format(netSalary)
+                    + " Savings: " + currencyFormat.format(totalSavings));
+        }
+    }
+}
